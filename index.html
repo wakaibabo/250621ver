@@ -20,10 +20,7 @@
 </head>
 <body>
   <!-- 첫 화면 -->
-  <div id="start-screen" class="screen active">
-    <h1>미세스 노래 소트 (250621ver.)</h1>
-    <button onclick="startSort()">시작하기</button>
-  </div>
+  
 
   <!-- 소트 진행 화면 -->
   <div id="sort-screen" class="screen">
@@ -69,13 +66,15 @@
     let stepCount = 0;
     let totalSteps = 0;
 
-    function startSort() {
-      document.getElementById('start-screen').classList.remove('active');
-      document.getElementById('sort-screen').classList.add('active');
-      queue = shuffle(songs).map(song => [song]);
-      stepCount = 0;
-      totalSteps = Math.ceil(songs.length * Math.log2(songs.length));
-      nextStep();
+    window.onload = function startSort() {
+  
+  document.getElementById('sort-screen').classList.add('active');
+  const shuffled = shuffle([...songs]);
+  queue = shuffled.map(song => [song]);
+  stepCount = 0;
+  totalSteps = Math.ceil(songs.length * Math.log2(songs.length));
+  currentPair = null;
+  nextStep();
     }
 
     function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
