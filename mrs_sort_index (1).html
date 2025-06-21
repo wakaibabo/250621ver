@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미세스 노래 소트 (250621ver.)</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: white; color: black; text-align: center; padding-top: 20px; }
+    .screen { display: none; flex-direction: column; justify-content: center; align-items: center; height: 100vh; padding: 20px; }
+    .active { display: flex; }
+    h1 { font-weight: 500; font-size: 16px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    button { padding: 15px 30px; margin-top: 30px; font-size: 18px; background: #000; color: white; border: none; border-radius: 0; cursor: pointer; }
+    .song-buttons { display: flex; flex-direction: row; gap: 20px; margin-top: 30px; }
+    .song-buttons button { width: 40vw; height: 20vh; font-size: 22px; background: #f9f9f9; color: #333; border: 2px solid #ccc; border-radius: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
+    .song-buttons button:hover { transform: scale(1.05); }
+    table { margin-top: 20px; width: 90%; max-width: 600px; border-collapse: collapse; }
+    th, td { padding: 10px; border: 1px solid #ccc; font-size: 16px; }
+    #progress { margin-top: 10px; font-size: 16px; color: gray; }
+  </style>
+</head>
+<body>
+  <!-- 첫 화면 -->
+  <div id="start-screen" class="screen active">
+    <h1>미세스 노래 소트 (250621ver.)</h1>
+    <button onclick="startSort()">시작하기</button>
+  </div>
+
+  <!-- 소트 진행 화면 -->
+  <div id="sort-screen" class="screen">
+    <h1>미세스 노래 소트 (250621ver.)</h1>
+    <div id="progress">0% 진행 중</div>
+    <div class="song-buttons">
+      <button id="btn1" onclick="choose(0)">곡 A</button>
+      <button id="btn2" onclick="choose(1)">곡 B</button>
+    </div>
+  </div>
+
+  <!-- 결과 화면 -->
+  <div id="result-screen" class="screen">
+    <h1>미세스 노래 소트 (250621ver.) 결과</h1>
+    <table id="ranking-table">
+      <thead><tr><th>순위</th><th>곡명</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button onclick="location.reload()">다시 시작하기</button>
+  </div>
+
+  <script>
+    const songs = [
+  "ANTENNA", "Attitude", "BFF", "Blizzard", "CHEERS", "CONFLICT", "Circle", "Coffee",
+  "Dear", "Doodle", "FACTORY", "Feeling", "Folktale", "HeLLo", "How-to", "Hug",
+  "In the Morning", "JOURNEY", "Just a Friend", "Ke-Mo Sah-Bee", "L.P", "Lion", "Log",
+  "Loneliness", "Love me, Love you", "Magic", "No.7", "Oz", "PARTY",
+  "PRESENT [English ver.]", "PRESENT(Japanese ver.)", "Part of me", "REVERSE", "SPLASH!!!",
+  "SimPle", "Soranji", "Soup", "Speaking", "StaRt", "SwitCh", "The White Lounge",
+  "Theater", "They are", "VIP", "Viking", "WHOO WHOO WHOO", "WaLL FloWeR", "WanteD! WanteD!",
+  "WanteD! WanteD!(KERENMI Remix)", "familie", "lovin'", "norn", "soFt-dRink", "umbrella",
+  "あなたに", "うブ", "えほん", "おもちゃの兵隊", "どこかで日は昇る", "はじまり feat. キヨサク",
+  "アウフヘーベン", "アボイドノート", "アポロドロス", "アンゼンパイ", "アンラブレス", "ア・プリオリ",
+  "インフェルノ", "キコリ時計", "クダリ", "ケセラセラ", "コロンブス", "サママ・フェスティバル!",
+  "スターダム", "スマイロブドリーマ", "ゼンマイ", "ダンスホール", "ダーリン", "ツキマシテハ",
+  "ナニヲナニヲ", "ナハトムジーク", "ニュー・マイ・ノーマル", "ノニサクウタ", "パブリック",
+  "ビターバカンス", "フロリジナル", "ブルーアンビエンス (feat.asmi)", "ミスカサズ",
+  "ライラック", "リスキーゲーム", "ロマンチシズム", "僕のこと", "光のうた", "君を知らない",
+  "嘘じゃないよ", "庶幾の唄", "延々", "恋と吟(うた)", "愛情と矛先", "我逢人", "日々と君",
+  "春愁", "月とアネモネ", "橙", "灯火", "点描の唄", "私", "私は最強", "絶世生物", "藍(あお)",
+  "道徳と皿", "青と夏", "鯨の唄", "クスシキ", "天国", "breakfast"
+];
+
+    let queue = [];
+    let currentPair = null;
+    let sortedList = null;
+    let totalSteps = 0;
+    let stepCount = 0;
+
+    function startSort() {
+      document.getElementById('start-screen').classList.remove('active');
+      document.getElementById('sort-screen').classList.add('active');
+      queue = shuffle(songs).map(song => [song]);
+      stepCount = 0;
+      totalSteps = Math.ceil(songs.length * Math.log2(songs.length));
+      nextStep();
+    }
+
+    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+    function nextStep() {
+      while (queue.length > 1 && (queue[0].length === 0 || queue[1].length === 0)) {
+        const a = queue.shift();
+        const b = queue.shift();
+        queue.unshift(a.length ? a : b);
+      }
+
+      if (queue.length === 1 && queue[0].length === songs.length) {
+        showResult(queue[0]);
+        return;
+      }
+
+      if (queue.length >= 2) {
+        const left = queue.shift();
+        const right = queue.shift();
+        currentPair = { left, right, result: [] };
+        nextComparison();
+      }
+    }
+
+    function nextComparison() {
+      if (currentPair.left.length && currentPair.right.length) {
+        const a = currentPair.left[0];
+        const b = currentPair.right[0];
+        document.getElementById('btn1').innerText = a;
+        document.getElementById('btn2').innerText = b;
+        document.getElementById('progress').innerText = `${Math.floor((++stepCount) / totalSteps * 100)}% 진행 중`;
+      } else {
+        const merged = [...currentPair.result, ...currentPair.left, ...currentPair.right];
+        queue.push(merged);
+        currentPair = null;
+        nextStep();
+      }
+    }
+
+    function choose(index) {
+      if (!currentPair) return;
+      const winner = index === 0 ? currentPair.left.shift() : currentPair.right.shift();
+      currentPair.result.push(winner);
+      nextComparison();
+    }
+
+    function showResult(result) {
+      document.getElementById('sort-screen').classList.remove('active');
+      document.getElementById('result-screen').classList.add('active');
+      const table = document.querySelector('#ranking-table tbody');
+      table.innerHTML = "";
+      result.forEach((song, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${i + 1}위</td><td>${song}</td>`;
+        table.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
