@@ -47,31 +47,27 @@
 
   <script>
     const songs = Array.from(new Set([
-  "ANTENNA", "Attitude", "BFF", "Blizzard", "CHEERS", "CONFLICT", "Circle", "Coffee",
-  "Dear", "Doodle", "FACTORY", "Feeling", "Folktale", "HeLLo", "How-to", "Hug",
-  "In the Morning", "JOURNEY", "Just a Friend", "Ke-Mo Sah-Bee", "L.P", "Lion", "Log",
-  "Loneliness", "Love me, Love you", "Magic", "No.7", "Oz", "PARTY",
-  "PRESENT [English ver.]", "PRESENT(Japanese ver.)", "Part of me", "REVERSE", "SPLASH!!!",
-  "SimPle", "Soranji", "Soup", "Speaking", "StaRt", "SwitCh", "The White Lounge",
-  "Theater", "They are", "VIP", "Viking", "WHOO WHOO WHOO", "WaLL FloWeR", "WanteD! WanteD!",
-  "WanteD! WanteD!(KERENMI Remix)", "familie", "lovin'", "norn", "soFt-dRink", "umbrella",
-  "あなたに", "うブ", "えほん", "おもちゃの兵隊", "どこかで日は昇る", "はじまり feat. キヨサク",
-  "アウフヘーベン", "アボイドノート", "アポロドロス", "アンゼンパイ", "アンラブレス", "ア・プリオリ",
-  "インフェルノ", "キコリ時計", "クダリ", "ケセラセラ", "コロンブス", "サママ・フェスティバル!",
-  "スターダム", "スマイロブドリーマ", "ゼンマイ", "ダンスホール", "ダーリン", "ツキマシテハ",
-  "ナニヲナニヲ", "ナハトムジーク", "ニュー・マイ・ノーマル", "ノニサクウタ", "パブリック",
-  "ビターバカンス", "フロリジナル", "ブルーアンビエンス (feat.asmi)", "ミスカサズ",
-  "ライラック", "リスキーゲーム", "ロマンチシズム", "僕のこと", "光のうた", "君を知らない",
-  "嘘じゃないよ", "庶幾の唄", "延々", "恋と吟(うた)", "愛情と矛先", "我逢人", "日々と君",
-  "春愁", "月とアネモネ", "橙", "灯火", "点描の唄", "私", "私は最強", "絶世生物", "藍(あお)",
-  "道徳と皿", "青と夏", "鯨の唄", "クスシキ", "天国", "breakfast"
-].map(s => s.trim()))
+      "ANTENNA","Attitude","BFF","Blizzard","CHEERS","CONFLICT","Circle","Coffee","Dear","Doodle",
+      "FACTORY","Feeling","Folktale","HeLLo","How-to","Hug","In the Morning","JOURNEY","Just a Friend",
+      "Ke-Mo Sah-Bee","L.P","Lion","Log","Loneliness","Love me, Love you","Magic","No.7","Oz","PARTY",
+      "PRESENT [English ver.]","PRESENT(Japanese ver.)","Part of me","REVERSE","SPLASH!!!","SimPle",
+      "Soranji","Soup","Speaking","StaRt","SwitCh","The White Lounge","Theater","They are","VIP",
+      "Viking","WHOO WHOO WHOO","WaLL FloWeR","WanteD! WanteD!","WanteD! WanteD!(KERENMI Remix)",
+      "familie","lovin'","norn","soFt-dRink","umbrella","あなたに","うブ","えほん","おもちゃの兵隊",
+      "どこかで日は昇る","はじまり feat. キヨサク","アウフヘーベン","アボイドノート","アポロドロス",
+      "アンゼンパイ","アンラブレス","ア・プリオリ","インフェルノ","キコリ時計","クダリ","ケセラセラ",
+      "コロンブス","サママ・フェスティバル!","スターダム","スマイロブドリーマ","ゼンマイ","ダンスホール",
+      "ダーリン","ツキマシテハ","ナニヲナニヲ","ナハトムジーク","ニュー・マイ・ノーマル","ノニサクウタ",
+      "パブリック","ビターバカンス","フロリジナル","ブルーアンビエンス (feat.asmi)","ミスカサズ",
+      "ライラック","リスキーゲーム","ロマンチシズム","僕のこと","光のうた","君を知らない","嘘じゃないよ",
+      "庶幾の唄","延々","恋と吟(うた)","愛情と矛先","我逢人","日々と君","春愁","月とアネモネ","橙","灯火",
+      "点描の唄","私","私は最強","絶世生物","藍(あお)","道徳と皿","青と夏","鯨の唄","クスシキ","天国","breakfast"
+    ].map(s => s.trim())));
 
     let queue = [];
     let currentPair = null;
-    let sortedList = null;
-    let totalSteps = 0;
     let stepCount = 0;
+    let totalSteps = 0;
 
     function startSort() {
       document.getElementById('start-screen').classList.remove('active');
