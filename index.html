@@ -104,8 +104,8 @@
       if (currentPair.left.length && currentPair.right.length) {
         const a = currentPair.left[0];
         const b = currentPair.right[0];
-        document.getElementById('btn1').innerText = a;
-        document.getElementById('btn2').innerText = b;
+        document.getElementById('btn1').innerText = a || '곡 A';
+        document.getElementById('btn2').innerText = b || '곡 B';
         document.getElementById('progress').innerText = `${Math.floor((++stepCount) / totalSteps * 100)}% 진행 중`;
       } else {
         const merged = [...currentPair.result, ...currentPair.left, ...currentPair.right];
