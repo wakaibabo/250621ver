@@ -81,36 +81,33 @@
     function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 
     function nextStep() {
-      while (queue.length > 1 && (queue[0].length === 0 || queue[1].length === 0)) {
-        const a = queue.shift();
-        const b = queue.shift();
-        queue.unshift(a.length ? a : b);
-      }
+  while (queue.length > 1 && (queue[0].length === 0 || queue[1].length === 0)) {
+    const a = queue.shift();
+    const b = queue.shift();
+    queue.unshift(a.length ? a : b);
+  }
 
-      if (queue.length === 1 && queue[0].length === songs.length) {
-        showResult(queue[0]);
-        return;
-      }
-
-      if (queue.length >= 2) {
-        const left = queue.shift();
-        const right = queue.shift();
-        currentPair = { left, right, result: [] };
-        nextComparison();
-      }
-    }
-
-    function nextComparison() {
-  const a = currentPair.left[0];
-  const b = currentPair.right[0];
-
-  if (!a || !b) {
-    const merged = [...currentPair.result, ...currentPair.left, ...currentPair.right];
-    queue.push(merged);
-    currentPair = null;
-    nextStep();
+  if (queue.length === 1 && queue[0].length === songs.length) {
+    showResult(queue[0]);
     return;
   }
+
+  if (queue.length >= 2) {
+    const left = queue.shift();
+    const right = queue.shift();
+    currentPair = { left, right, result: [] };
+
+    if (!currentPair.left.length || !currentPair.right.length) {
+      const merged = [...currentPair.result, ...currentPair.left, ...currentPair.right];
+      queue.push(merged);
+      currentPair = null;
+      nextStep();
+      return;
+    }
+
+    nextComparison();
+  }
+}
 
   document.getElementById('btn1').innerText = a;
   document.getElementById('btn2').innerText = b;
